@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NBA Athletes</title>
+    <style type="text/css">
+        button,
+        div,
+        form,
+        input {
+            margin: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="buttons-view">
+        <button class="player" data-person="Draymond Green">Draymond Green</button>
+        <button class="player" data-person="Lebron James">Lebron James</button>
+        <button class="player" data-person="Kawhi Leonard">Kawhi Leonard</button>
+        <button class="player" data-person="Kyrie Irving">Kyrie Irving</button>
+        <button class="player" data-person="Kevin Durant">Kevin Durant</button>
+        <button class="player" data-person="Steph Curry">Steph Curry</button>
+    </div>
+    <div id="images"></div>
+
+    <form id="nba-form">
+        <label for="player-input">Add An Athlete</label>
+        <input type="text" id="player-input">
+        <br>
+        <input id="add-player" type="submit" value="Add An Athlete">
+    </form>
+
+    <div id="gifs-appear-here"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        var topics = ["Draymond Green", "Lebron James", "Kawhi Leonard", "Kyrie Irving", "Kevin Durant", "Steph Curry"];
+        function renderButtons() {
+
+            $("#buttons-view").empty();
+
+            for (var i = 0; i < topics.length; i++) {
+
+                var a = $("<button>");
+                a.addClass("player");
+                a.attr("data-person", topics[i]);
+                a.text(topics[i]);
+
+                $("#buttons-view").append(a);
+            }
+        }
+        $("#add-player").on("click", function (event) {
+            event.preventDefault();
+
+            var player = $("#player-input").val().trim();
+            topics.push(player);
+            renderButtons();
+        });
+        renderButtons();
+
+        $(document).on("click", "button", function() {
+        // $("button").on("click", function () {
+            var person = $(this).attr("data-person");
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                person + "&api_key=VjEjZM7yFJ333FD63MEBN9uNkYFZKU7r&limit=10";
+            $.ajax({
+                url:queryURL,
+                method: "GET"
+            })
+            .then(function(response) {
+                var results = response.data;
+
+                for (var i = 0; i < results.length; i++) {
+                    var gifDiv = $("<div>");
+
+                    var rating = results[i].rating;
+
+                    var p = $("<p>").text("Rating: " + rating);
+
+                    var personImage = $("<img>");
+                    personImage.attr("src", results[i].images.fixed_height.url);
+                    
+                    gifDiv.prepend(p);
+                    gifDiv.prepend(personImage);
+
+                    $("#gifs-appear-here").prepend(gifDiv);
+                }
+            })
+       
+       
+        })
+
+
+    </script>
+
+</body>
+
+</html>
