@@ -1,7 +1,6 @@
 button {
-    background-color: black;
-    border: blue;
-    color: red;
+    background-color: red;
+    color: black;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -10,4 +9,7 @@ button {
     font-weight: bolder;
     margin: 4px 2px;
     cursor: pointer;
+}
+body {
+    background-image: url(../Gif/assets/images/download\ \(1\).jpg)
 }
